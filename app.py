@@ -7,6 +7,12 @@ st.set_page_config(
     page_icon="📊",
     layout="wide"
 )
+if "message" not in st.session_state:
+    st.session_state.message = []
+if "df" not in st.session_state:
+    st.session_state.df = None
+if "data summary" not in st.session_state:
+    st.session_state.data_summary = None
 
 st.title("Ask your CSV")
 st.markdown("Upload your data and ask question in plain English")
@@ -31,7 +37,7 @@ with st.sidebar:
                         st.metric("Total Rows", df.shape[0])
                         st.metric("Total Columns", df.shape[1])
                     with col2:
-                        st.metric("Memory Usage", f"{df.memory_usage().sum()/ 1024:.1f} KB")
-                        st.metric("Missing Values:", df.isnull().sum())
+                        st.metric("Memory Usage", f"{df.memory_usage().sum() / 1024:.1f} KB")
+                        st.metric("Missing Values", df.isnull().sum().sum())
         except Exception as e:
             st.error(f"Error reading file: {str(e)}")

@@ -1,12 +1,16 @@
 #This is Streamlit app
 import streamlit as st
 import pandas as pd
+import openai
 
 st.set_page_config(
     page_title="Ask your CSV",
     page_icon="📊",
     layout="wide"
 )
+
+client = openai.OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+
 if "message" not in st.session_state:
     st.session_state.message = []
 if "df" not in st.session_state:
@@ -25,6 +29,7 @@ with st.sidebar:
     if uploaded_file:
         try:
             df =pd.read_csv(uploaded_file)
+            st.session_state.df = df
             st.success(f"Loaded {df.shape[0]} rows x {df.shape[1]} columns.")
 
             #Data preview

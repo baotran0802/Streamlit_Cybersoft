@@ -41,3 +41,42 @@ with st.sidebar:
                         st.metric("Missing Values", df.isnull().sum().sum())
         except Exception as e:
             st.error(f"Error reading file: {str(e)}")
+            st.info("Please make sure your file is a valid CSV format.")
+
+    else:
+        st.info("Upload a CSV file to start analyzing!")
+#3. Main chat interface:
+if st.session_state.df is not None: #Nếu đã có df thì mới thực hiện
+    # Display chat history 
+    for msg in st.session_state.messages: 
+        with st.chat_message(msg["role"]):
+            st.markdown(msg["content"])
+
+    #Chat input
+    user_input = st.chat_input("Ask a question about your data")
+
+    if user_input: #Người dùng đã nhập câu hỏi vào
+            # Add user message to history
+            st.session_state.messages.append({"role":"user", "content": user_input}) #Lưu lại lịch sử ng dùng đã nhập vào
+    
+            # Display user message:
+            with st.chat_message("user"):
+                st.markdown(user_input)
+    else:
+        #No data uploaded state
+        
+        col1, col2, col3 = st.columns([1,2,1]) #Chia làm 4 phần: col1, col3 -> 25%, col2 -> 50%
+        with col2:
+            st.info("Please upload a CSV file to start")
+    
+            #Example questions:
+            st.markdown("### Example questions you can ask:")
+            st.markdown("""
+            - What are the main trends in my data?
+            - Show me a correlation matrix
+            - Create a bar chart of the top 10 categories
+            - What's the average value by month?
+            - Are there any outliers in the price column?
+            """)
+
+
